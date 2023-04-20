@@ -1,0 +1,93 @@
+name: Showcase-e2e-test-minikube
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test: 
+    name: Run Cypress Tests for Backstage
+    strategy:
+      fail-fast: true
+      matrix:
+          os: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    continue-on-error: true
+    
+    steps:
+    - name: Check out code into the working directory
+      uses: actions/checkout@v3
+    
+    - name: Start minikube
+      id: minikube
+      uses: medyagh/setup-minikube@master
+      with:
+          driver: docker
+          addons: ingress
+    
+    # - name: Obtain minikube ip
+    #   id: minikube-ip
+    #   shell: bash
+    #   run:  |
+    #     echo "MINIKUBE_IP=$(minikube ip)" >> "$GITHUB_OUTPUT"
+    #     kubectl get pods -A
+    
+    # - name: Add backstage host name into /etc/hosts
+    #   run: |
+    #     sudo echo "${{ steps.minikube-ip.outputs.MINIKUBE_IP }} janusidp.test.com" | sudo tee -a /etc/hosts
+    
+    - name: Install wait-on
+      run: npm install -g wait-on 
+      shell: bash
+    
+    - name: Install Backstage helm chart
+      uses: WyriHaximus/github-action-helm3@v3
+      with:
+        exec: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo add backstage https://backstage.github.io/charts
+          helm install -n backstage --create-namespace backstage backstage/backstage -f ./helm/values-minikube-ingress.yaml
+            
+    # - name: Wait until Showcase app is up and running
+    #   run: |
+    #     wait-on http://janusidp.test.com --httpTimeout 50000 && curl http://janusidp.test.com 
+    - name: Run port-forward
+      run: |
+        sleep 45s
+        kubectl port-forward -n ${{ secrets.OPENSHIFT_NAMESPACE }} svc/backstage 7007:7007 &
+      shell: bash
+    - name: Run tests
+      uses: cypress-io/github-action@v5
+      with:
+        browser: chrome  
+        wait-on: 'http://localhost:7007'
+        wait-on-timeout: 120
+        working-directory: app-test
+        spec: cypress/e2e/*.ts
+      env:
+          # pass GitHub token to detect new build vs re-run build
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          # pass the project ID from the secrets through environment variable
+          CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+    - name: Clean up by uninstalling Backstage helm chart
+      uses: WyriHaximus/github-action-helm3@v3
+      if: always()
+      with:
+        exec: |
+          helm uninstall backstage -n ${{ secrets.OPENSHIFT_NAMESPACE }}
+    - name: Upload screenshot if failed
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: cypress-tests-failure-screenshots-${{ matrix.os }}
+        path: ${{ github.workspace }}/app-test/cypress/screenshots
+        retention-days: 14
+    - name: Upload cypress video always - temporary
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: cypress-tests-videos-${{ matrix.os }}
+        path: ${{ github.workspace }}/app-test/cypress/videos
+        retention-days: 14
