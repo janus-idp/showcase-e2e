@@ -20,6 +20,15 @@ jobs:
     - name: Check out code into the working directory
       uses: actions/checkout@v3
 
+    # Download and Install IBM Cloud CLI
+    - name: Install IBM Cloud CLI
+      run: |
+        curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+        ibmcloud --version
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f kubernetes-service
+        ibmcloud plugin install -f container-registry
+
     - name: Log in by using an service ID api-key and set context to a cluster
       shell: bash
       run: |
