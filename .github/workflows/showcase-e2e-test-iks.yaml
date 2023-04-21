@@ -20,18 +20,10 @@ jobs:
     - name: Check out code into the working directory
       uses: actions/checkout@v3
 
-    - name: Install IBM Cloud CLI
-      uses: IBM/ibmcloud-install-cli@v1
-    
-    - name: Log in to IBM Cloud
-      uses: IBM/ibmcloud-login@v1
-      with:
-        api_key: ${{ secrets.API_KEY_QE }}
-        region: ${{ secrets.REGION }}
-
-    - name: Context to a cluster for this session
+    - name: Log in by using an service ID api-key and set context to a cluster
       shell: bash
       run: |
+          ibmcloud login -r ${{ secrets.REGION }} --apikey ${{ secrets.API_KEY_QE }}
           ibmcloud ks cluster config --cluster ${{ secrets.IKS_CLUSTER_ID }}
           kubectl config current-context
 
