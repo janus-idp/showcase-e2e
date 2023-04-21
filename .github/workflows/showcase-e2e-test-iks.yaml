@@ -1,4 +1,4 @@
-name: Showcase-e2e-test-minikube
+name: Showcase-e2e-test-iks
 
 on:
   push:
@@ -19,25 +19,22 @@ jobs:
     steps:
     - name: Check out code into the working directory
       uses: actions/checkout@v3
+
+    - name: Install IBM Cloud CLI
+      uses: IBM/ibmcloud-install-cli@v1
     
-    - name: Start minikube
-      id: minikube
-      uses: medyagh/setup-minikube@master
+    - name: Log in to IBM Cloud
+      uses: IBM/ibmcloud-login@v1
       with:
-          driver: docker
-          addons: ingress
-    
-    # - name: Obtain minikube ip
-    #   id: minikube-ip
-    #   shell: bash
-    #   run:  |
-    #     echo "MINIKUBE_IP=$(minikube ip)" >> "$GITHUB_OUTPUT"
-    #     kubectl get pods -A
-    
-    # - name: Add backstage host name into /etc/hosts
-    #   run: |
-    #     sudo echo "${{ steps.minikube-ip.outputs.MINIKUBE_IP }} janusidp.test.com" | sudo tee -a /etc/hosts
-    
+        api_key: ${{ secrets.API_KEY_QE }}
+        region: ${{ secrets.REGION }}
+
+    - name: Context to a cluster for this session
+      shell: bash
+      run: |
+          ibmcloud ks cluster config --cluster ${{ secrets.IKS_CLUSTER_ID }}
+          kubectl config current-context
+
     - name: Install wait-on
       run: npm install -g wait-on 
       shell: bash
@@ -48,7 +45,8 @@ jobs:
         exec: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo add backstage https://backstage.github.io/charts
-          helm install -n backstage --create-namespace backstage backstage/backstage -f ./helm/values-k8s-ingress.yaml
+          helm repo update
+          helm install -n backstage backstage backstage/backstage -f ./helm/values-k8s-ingress.yaml
             
     # - name: Wait until Showcase app is up and running
     #   run: |
