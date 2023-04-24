@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  OPENSHIFT_NAMESPACE : ${{ secrets.OPENSHIFT_NAMESPACE }}
+  OPENSHIFT_SERVER : ${{ secrets.OPENSHIFT_SERVER }}
+  PROJECT_ID : ${{ secrets.PROJECT_ID }}
+
 jobs:
   test: 
     name: Run Cypress Tests for Backstage
@@ -37,8 +42,8 @@ jobs:
     - name: Log in by using an service ID api-key and set project
       shell: bash
       run: |
-          oc login -u apikey -p ${{ secrets.API_KEY_QE }} --server=${{ secrets.OPENSHIFT_SERVER }}
-          oc project ${{ secrets.OPENSHIFT_NAMESPACE }}
+          oc login -u apikey -p ${{ secrets.API_KEY_QE }} --server=$OPENSHIFT_SERVER
+          oc project $OPENSHIFT_NAMESPACE
 
     - name: Install wait-on
       run: npm install -g wait-on 
@@ -52,12 +57,12 @@ jobs:
           helm repo add backstage https://backstage.github.io/charts
           helm repo add janus-idp https://janus-idp.github.io/helm-backstage
           helm repo update
-          helm upgrade -i backstage janus-idp/backstage -f ./helm/values-openshift-route.yaml -n ${{ secrets.OPENSHIFT_NAMESPACE }}
+          helm upgrade -i backstage janus-idp/backstage -f ./helm/values-openshift-route.yaml -n $OPENSHIFT_NAMESPACE
           
     - name: Run port-forward
       run: |
         sleep 45s
-        oc port-forward -n ${{ secrets.OPENSHIFT_NAMESPACE }} svc/backstage-upstream 7007:http-backend &
+        oc port-forward -n $OPENSHIFT_NAMESPACE svc/backstage-upstream 7007:http-backend &
       shell: bash
     - name: Run tests
       uses: cypress-io/github-action@v5
@@ -71,13 +76,13 @@ jobs:
           # pass GitHub token to detect new build vs re-run build
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           # pass the project ID from the secrets through environment variable
-          CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          CYPRESS_PROJECT_ID: $PROJECT_ID
     - name: Clean up by uninstalling Backstage helm chart
       uses: WyriHaximus/github-action-helm3@v3
       if: always()
       with:
         exec: |
-          helm uninstall backstage -n ${{ secrets.OPENSHIFT_NAMESPACE }}
+          helm uninstall backstage -n $OPENSHIFT_NAMESPACE
     - name: Upload screenshot if failed
       uses: actions/upload-artifact@v3
       if: failure()
