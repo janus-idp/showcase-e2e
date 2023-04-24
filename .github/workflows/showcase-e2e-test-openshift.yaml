@@ -56,7 +56,7 @@ jobs:
           
     - name: Run port-forward
       run: |
-        sleep 15s
+        sleep 45s
         oc port-forward -n ${{ secrets.OPENSHIFT_NAMESPACE }} svc/backstage-upstream 7007:http-backend &
       shell: bash
     - name: Run tests
