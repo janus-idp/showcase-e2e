@@ -3,9 +3,7 @@ name: Showcase-e2e-test-minikube
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+    
 jobs:
   test: 
     name: Run Cypress Tests for Backstage
