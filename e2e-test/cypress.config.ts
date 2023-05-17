@@ -4,17 +4,19 @@ export default defineConfig({
   video: true,
   videoUploadOnPasses: true,
   screenshotOnRunFailure: true,
+  // These settings apply everywhere unless overridden
   defaultCommandTimeout: 5000,
   viewportWidth: 1000,
   viewportHeight: 600,
+  // Viewport settings overridden for component tests
+  component: {
+    viewportWidth: 500,
+    viewportHeight: 500,
+  },
+  // Command timeout overridden for E2E tests
   e2e: {
     defaultCommandTimeout: 10000,
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
-    setupNodeEvents(on, config) {
-      return require("./cypress/plugins/index.js")(on, config);
-    },
     baseUrl: "http://localhost:7007",
-    specPattern: "cypress/e2e/**/*.spec.*",
+    specPattern: "cypress/e2e/**/*.spec.ts",
   },
 });
