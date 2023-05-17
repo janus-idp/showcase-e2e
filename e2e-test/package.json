@@ -10,7 +10,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run --headless --browser chrome --spec 'cypress/e2e/*.spec.ts'",
     "test:backstage-run": "yarn cypress:run",
-    "test:backstage-open": "yarn cypress:open",
+    "test:backstage-open": "yarn cypress:open"
   },
   "devDependencies": {
     "@interactors/html": "^1.0.0-rc1.4",
