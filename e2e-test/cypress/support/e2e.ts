@@ -32,6 +32,5 @@ import {
  * @example cy.login()
  */
 Cypress.Commands.add("login", () => {
-  // TBD
   cy.visit("/");
 });
