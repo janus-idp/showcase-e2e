@@ -17,7 +17,6 @@ export default defineConfig({
   e2e: {
     defaultCommandTimeout: 10000,
     baseUrl: "http://localhost:7007",
-    // baseUrl: "https://showcase.janus-idp.io/",
     specPattern: "cypress/e2e/**/*.spec.ts",
   },
 });
