@@ -1,11 +1,11 @@
 import {
-  Button,
-  Page,
-  TextField,
   Heading,
-  Link,
-  Select,
-  Details,
+  // Button,
+  // Page,
+  // TextField,
+  // Link,
+  // Select,
+  // Details,
 } from "@interactors/html";
 
 describe("Home Page test", () => {
@@ -13,7 +13,7 @@ describe("Home Page test", () => {
     cy.login();
   });
 
-  it("should have the expected links in side bar", async () => {
+  it("should have the expected links in side bar", () => {
     cy.expect([Heading("Home").exists(), Heading("Catalog").exists()]);
     cy.do(Heading("Home").click());
   });
