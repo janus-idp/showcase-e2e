@@ -14,7 +14,7 @@ describe("Home Page test", () => {
   });
 
   it("should have the expected links in side bar", () => {
-    cy.expect([Heading("Home").exists(), Heading("Catalog").exists()]);
+    cy.expect([Heading("Home").exists(), Heading("Search").exists()]);
     cy.do(Heading("Home").click());
   });
 });
