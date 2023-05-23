@@ -75,7 +75,7 @@ helm upgrade -i backstage janus-idp/backstage -f ./helm/values-openshift-route.y
 echo "Waiting for backstage installation..."
 sleep 45
 
-oc port-forward -n backstage svc/backstage-upstream 7007:http-backend &
+oc port-forward -n backstage svc/backstage 7007:http-backend &
 # Store the PID of the background process
 PID=$!
 
