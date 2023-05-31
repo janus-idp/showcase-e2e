@@ -1,13 +1,21 @@
-backstage:
-  extraEnvVars:
-    - name: 'APP_CONFIG_app_baseUrl'
-      value: 'http://{{ .Values.ingress.host }}'
-    - name: 'APP_CONFIG_backend_baseUrl'
-      value: 'http://{{ .Values.ingress.host }}'
-    - name: 'APP_CONFIG_backend_cors_origin'
-      value: 'http://{{ .Values.ingress.host }}`'
- 
-ingress:
-  enabled: true
-  host: janusidp.test.com
+upstream:
+  backstage:
+    extraEnvVars:
+      - name: 'APP_CONFIG_app_baseUrl'
+        value: 'http://{{ .Values.ingress.host }}'
+      - name: 'APP_CONFIG_backend_baseUrl'
+        value: 'http://{{ .Values.ingress.host }}'
+      - name: 'APP_CONFIG_backend_cors_origin'
+        value: 'http://{{ .Values.ingress.host }}`'
 
+  ingress:
+    enabled: true
+    host: janusidp.test.com
+
+  postgresql:
+    primary:
+      persistence:
+        enabled: false
+
+route:
+  enabled: false

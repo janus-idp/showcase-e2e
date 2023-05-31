@@ -3,9 +3,9 @@ name: Showcase-e2e-test-iks
 on:
   push:
     branches: [ main ]
-  
+
 jobs:
-  test: 
+  test:
     name: Run Cypress Tests for Backstage
     strategy:
       fail-fast: true
@@ -13,7 +13,7 @@ jobs:
           os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     continue-on-error: true
-    
+
     steps:
     - name: Check out code into the working directory
       uses: actions/checkout@v3
@@ -35,21 +35,22 @@ jobs:
           kubectl config current-context
 
     - name: Install wait-on
-      run: npm install -g wait-on 
+      run: npm install -g wait-on
       shell: bash
-    
+
     - name: Install Backstage helm chart
       uses: WyriHaximus/github-action-helm3@v3
       with:
         exec: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo add backstage https://backstage.github.io/charts
-          helm repo update
-          helm install -n backstage backstage backstage/backstage -f ./helm/values-k8s-ingress.yaml
-            
+          helm repo add janus-idp https://janus-idp.github.io/helm-backstage
+
+          helm install -n backstage backstage janus-idp/backstage -f ./helm/values-k8s-ingress.yaml
+
     # - name: Wait until Showcase app is up and running
     #   run: |
-    #     wait-on http://janusidp.test.com --httpTimeout 50000 && curl http://janusidp.test.com 
+    #     wait-on http://janusidp.test.com --httpTimeout 50000 && curl http://janusidp.test.com
     - name: Run port-forward
       run: |
         sleep 45s
@@ -58,7 +59,7 @@ jobs:
     - name: Run tests
       uses: cypress-io/github-action@v5
       with:
-        browser: chrome  
+        browser: chrome
         wait-on: 'http://localhost:7007'
         wait-on-timeout: 120
         working-directory: app-test

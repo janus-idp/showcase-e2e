@@ -3,9 +3,9 @@ name: Showcase-e2e-test-openshift
 on:
   push:
     branches: [ main ]
-  
+
 jobs:
-  test: 
+  test:
     name: Run Cypress Tests for Backstage
     strategy:
       fail-fast: true
@@ -13,7 +13,7 @@ jobs:
           os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     continue-on-error: true
-    
+
     steps:
     - name: Check out code into the working directory
       uses: actions/checkout@v3
@@ -39,9 +39,9 @@ jobs:
           oc project ${{ secrets.OPENSHIFT_NAMESPACE }}
 
     - name: Install wait-on
-      run: npm install -g wait-on 
+      run: npm install -g wait-on
       shell: bash
-    
+
     - name: Install Backstage helm chart
       uses: WyriHaximus/github-action-helm3@v3
       with:
@@ -49,9 +49,9 @@ jobs:
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo add backstage https://backstage.github.io/charts
           helm repo add janus-idp https://janus-idp.github.io/helm-backstage
-          helm repo update
+
           helm upgrade -i backstage janus-idp/backstage -f ./helm/values-openshift-route.yaml -n ${{ secrets.OPENSHIFT_NAMESPACE }}
-          
+
     - name: Run port-forward
       run: |
         sleep 45s
@@ -60,7 +60,7 @@ jobs:
     - name: Run tests
       uses: cypress-io/github-action@v5
       with:
-        browser: chrome 
+        browser: chrome
         wait-on: 'http://localhost:7007'
         wait-on-timeout: 120
         working-directory: app-test
