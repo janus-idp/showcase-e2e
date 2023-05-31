@@ -68,10 +68,10 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo add backstage https://backstage.github.io/charts
 helm repo add janus-idp https://janus-idp.github.io/helm-backstage
 helm repo update
-helm install -n backstage --create-namespace backstage janus-idp/backstage -f ./helm/values-k8s-ingress.yaml --wait --timeout 90s
+helm install -n backstage --create-namespace backstage janus-idp/backstage -f ./helm/values-k8s-ingress.yaml --wait
 
 echo "Waiting for backstage deployment..."
-sleep 30
+sleep 45
 
 kubectl port-forward -n backstage svc/backstage 7007:7007 &
 # Store the PID of the background process
