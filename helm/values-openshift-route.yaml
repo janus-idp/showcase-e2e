@@ -7,10 +7,8 @@ upstream:
         value: "https://{{ .Values.global.host }}"
       - name: "APP_CONFIG_backend_cors_origin"
         value: "https://{{ .Values.global.host }}"
-  ingress:
-    enabled: false
+
 route:
-  enabled: true
   host: "{{ .Values.global.host }}"
 
 global:

@@ -70,7 +70,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo add backstage https://backstage.github.io/charts
 helm repo add janus-idp https://janus-idp.github.io/helm-backstage
 helm repo update
-helm upgrade -i backstage janus-idp/backstage -n backstage --wait
+helm upgrade -i backstage janus-idp/backstage -n backstage -f ./helm/values-openshift-route.yaml --wait
 
 echo "Waiting for backstage deployment..."
 sleep 45
