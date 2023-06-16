@@ -69,6 +69,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo add backstage https://backstage.github.io/charts
 helm repo add janus-idp https://janus-idp.github.io/helm-backstage
 helm repo update
+
 helm upgrade -i backstage backstage/backstage -n backstage -f ./helm/values-k8s-ingress.yaml --wait
   
 echo "Waiting for backstage deployment..."
