@@ -76,13 +76,14 @@ helm upgrade -i backstage janus-idp/backstage -n backstage --wait
 echo "Waiting for backstage deployment..."
 sleep 45
 
+oc get pods -n backstage
 oc port-forward -n backstage svc/backstage 7007:http-backend &
 # Store the PID of the background process
 PID=$!
 
 sleep 15
 
-# Test to see if Backstage is up and running
+# Check if Backstage is up and running
 BACKSTAGE_URL="http://localhost:7007"
 BACKSTAGE_URL_RESPONSE=$(curl -Is "$BACKSTAGE_URL" | head -n 1)
 echo "$BACKSTAGE_URL_RESPONSE"
