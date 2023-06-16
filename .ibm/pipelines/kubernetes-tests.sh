@@ -1,5 +1,6 @@
 #!/bin/bash
 LOGFILE="pr-${GIT_PR_NUMBER}-kubernetes-tests-${BUILD_NUMBER}"
+echo "Log file: ${LOGFILE}"
 # source ./.ibm/pipelines/functions.sh
 
 # install the latest ibmcloud cli on Linux
@@ -20,7 +21,7 @@ ibmcloud config --check-version=false
 ibmcloud plugin install -f container-registry
 ibmcloud plugin install -f kubernetes-service
 
-ibmcloud login -r "${IBM_REGION}" --apikey "${API_KEY_QE}"
+ibmcloud login -r "${IBM_REGION}" -g "${IBM_RSC_GROUP}" --apikey "${SERVICE_ID_API_KEY}"
 ibmcloud ks cluster config --cluster "${IKS_CLUSTER_ID}"
 
 install_kubectl() {
@@ -68,10 +69,8 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo add backstage https://backstage.github.io/charts
 helm repo add janus-idp https://janus-idp.github.io/helm-backstage
 helm repo update
-helm install -n backstage --create-namespace backstage janus-idp/backstage -f ./helm/values-k8s-ingress.yaml --wait
-
-echo "Waiting for backstage deployment..."
-sleep 45
+helm upgrade -i backstage backstage/backstage -n backstage --wait
+kubectl get pods -n backstage
 
 kubectl port-forward -n backstage svc/backstage 7007:7007 &
 # Store the PID of the background process
