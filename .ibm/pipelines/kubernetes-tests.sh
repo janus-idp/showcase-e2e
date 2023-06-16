@@ -70,8 +70,11 @@ helm repo add backstage https://backstage.github.io/charts
 helm repo add janus-idp https://janus-idp.github.io/helm-backstage
 helm repo update
 helm upgrade -i backstage backstage/backstage -n backstage --wait
-kubectl get pods -n backstage
 
+echo "Waiting for backstage deployment..."
+sleep 45
+
+kubectl get pods -n backstage
 kubectl port-forward -n backstage svc/backstage 7007:7007 &
 # Store the PID of the background process
 PID=$!

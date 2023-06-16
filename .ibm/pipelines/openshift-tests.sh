@@ -73,6 +73,9 @@ helm repo add janus-idp https://janus-idp.github.io/helm-backstage
 helm repo update
 helm upgrade -i backstage janus-idp/backstage -n backstage --wait
 
+echo "Waiting for backstage deployment..."
+sleep 45
+
 oc port-forward -n backstage svc/backstage 7007:http-backend &
 # Store the PID of the background process
 PID=$!
