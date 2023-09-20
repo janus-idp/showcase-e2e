@@ -96,11 +96,6 @@ oc version --client
 # oc login -u apikey -p "${SERVICE_ID_API_KEY}" --server="${IBM_OPENSHIFT_ENDPOINT}"
 oc login --token=${K8S_CLUSTER_TOKEN} --server=${K8S_CLUSTER_URL}
 
-# delete name space if exists e.g. rhdh-test
-if oc get namespace ${NAME_SPACE} > /dev/null 2>&1; then
-  oc delete namespace ${NAME_SPACE}
-fi
-oc create namespace ${NAME_SPACE}
 oc project ${NAME_SPACE}
 
 install_helm
