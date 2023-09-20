@@ -1,30 +1,19 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-labels: [kind/bug, status/triage]
+name: Bug Report
+about: If something isn't working
+labels: ["kind/bug", "status/triage"]
 ---
 
-## Describe the bug
+### Describe the bug
 
-A clear and concise description of what the bug is.
+A clear and concise description of what the bug is. (provide screenshots if applicable)
 
-## To Reproduce
+### Expected Behavior
 
-Steps to reproduce the behavior:
+### What are the steps to reproduce this bug?
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+1. …
+2. …
+3. …
 
-## Expected behavior
-
-A clear and concise description of what you expected to happen.
-
-## Screenshots
-
-If applicable, add screenshots to help explain your problem.
-
-## Additional context
-
-Add any other context about the problem here.
+### Versions of software used and environment
