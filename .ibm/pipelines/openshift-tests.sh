@@ -96,30 +96,23 @@ oc version --client
 # oc login -u apikey -p "${SERVICE_ID_API_KEY}" --server="${IBM_OPENSHIFT_ENDPOINT}"
 oc login --token=${K8S_CLUSTER_TOKEN} --server=${K8S_CLUSTER_URL}
 
-# create a name space e.g. rhdh-test
-if ! oc get namespace ${NAME_SPACE} > /dev/null 2>&1; then
-    oc create namespace ${NAME_SPACE}
-else
-    echo "Namespace ${NAME_SPACE} already exists!"
+# delete name space if exists e.g. rhdh-test
+if oc get namespace ${NAME_SPACE} > /dev/null 2>&1; then
+  oc delete namespace ${NAME_SPACE}
 fi
-
+oc create namespace ${NAME_SPACE}
 oc project ${NAME_SPACE}
 
 install_helm
 
 add_helm_repos
 
-helm upgrade -i backstage janus-idp/backstage -n backstage --wait
-
-# # KNOWN ISSUE: https://issues.redhat.com/browse/OCPBUGSM-37095
-# # Install with CLI then upgrade with CONSOLE is failed
-# helm upgrade -i ${RELEASE_NAME} -n ${NAME_SPACE} ${HELM_REPO_NAME}/${HELM_IMAGE_NAME} -f $DIR/value_files/${HELM_CHART_VALUE_FILE_NAME}
 helm upgrade -i ${RELEASE_NAME} -n ${NAME_SPACE} ${HELM_REPO_NAME}/${HELM_IMAGE_NAME}
 
 echo "Waiting for backstage deployment..."
 sleep 45
 
-oc get pods -n backstage
+oc get pods -n ${NAME_SPACE}
 
 # oc port-forward -n backstage svc/backstage 7007:http-backend &
 # # Store the PID of the background process
