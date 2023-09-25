@@ -16,7 +16,7 @@ export default defineConfig({
   // Command timeout overridden for E2E tests
   e2e: {
     defaultCommandTimeout: 10000,
-    baseUrl: "PLACE_HOLDER",
+    baseUrl: "https://PLACE_HOLDER",
     specPattern: "cypress/e2e/**/*.spec.ts",
   },
 });
