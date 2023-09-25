@@ -109,7 +109,7 @@ helm upgrade -i ${RELEASE_NAME} -n ${NAME_SPACE} ${HELM_REPO_NAME}/${HELM_IMAGE_
 echo "Waiting for backstage deployment..."
 sleep 45
 
-echo "Display pods..."
+echo "Display pods for verification..."
 oc get pods -n ${NAME_SPACE}
 
 # oc port-forward -n backstage svc/backstage 7007:http-backend &
