@@ -131,6 +131,6 @@ yarn install
 Xvfb :99 &
 export DISPLAY=:99
 
-yarn run cypress:run -- --config baseUrl=${CYPRESS_baseUrl}
+yarn run cypress:run --config baseUrl="${CYPRESS_baseUrl}"
 
 pkill Xvfb
