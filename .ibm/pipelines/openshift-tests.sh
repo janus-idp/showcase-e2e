@@ -119,26 +119,25 @@ oc get pods -n ${NAME_SPACE}
 # sleep 15
 
 # # Check if Backstage is up and running
-# BACKSTAGE_URL="http://localhost:7007"
-# BACKSTAGE_URL_RESPONSE=$(curl -Is "$BACKSTAGE_URL" | head -n 1)
-# echo "$BACKSTAGE_URL_RESPONSE"
+BACKSTAGE_URL="https://backstage-showcase.backstage-os-eu-de-2-bx2-c74b3ed44ce86949f501aefb2db80652-0000.eu-de.containers.appdomain.cloud/"
+BACKSTAGE_URL_RESPONSE=$(curl -Is "$BACKSTAGE_URL" | head -n 1)
+echo "$BACKSTAGE_URL_RESPONSE"
 
-# cd $WORKING_DIR/e2e-test
-# yarn install
+cd $WORKING_DIR/e2e-test
+yarn install
 
-# Xvfb :99 &
-# export DISPLAY=:99
+Xvfb :99 &
+export DISPLAY=:99
 
-# # yarn cypress run --headless --browser chrome
-# yarn run cypress:run 
+yarn run cypress:run 
 
-# pkill Xvfb
+pkill Xvfb
 
-# cd $WORKING_DIR
+cd $WORKING_DIR
 
 # # Send Ctrl+C to the process
 # kill -INT $PID
 
-# helm uninstall backstage -n backstage
+# helm uninstall ${RELEASE_NAME} -n ${NAME_SPACE}
 
-# rm -rf ~/tmpbin
+rm -rf ~/tmpbin
