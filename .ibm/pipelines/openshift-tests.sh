@@ -78,15 +78,12 @@ install_helm() {
     HELM_INSTALL_DIR=$(pwd)
     curl -sL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash -f
     export PATH=${HELM_INSTALL_DIR}:$PATH
-
-    cd $DIR
     echo "helm client installed successfully."
   fi
 }
 
 LOGFILE="pr-${GIT_PR_NUMBER}-openshift-tests-${BUILD_NUMBER}"
 echo "Log file: ${LOGFILE}"
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # source ./.ibm/pipelines/functions.sh
 
 # install ibmcloud
@@ -108,11 +105,14 @@ oc version --client
 oc login --token=${K8S_CLUSTER_TOKEN} --server=${K8S_CLUSTER_URL}
 
 oc project ${NAME_SPACE}
+WORKING_DIR=$(pwd)
 
 install_helm
+cd $WORKING_DIR
 
 add_helm_repos
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 helm upgrade -i ${RELEASE_NAME} -n ${NAME_SPACE} ${HELM_REPO_NAME}/${HELM_IMAGE_NAME} -f $DIR/value_files/${HELM_CHART_VALUE_FILE_NAME} --set global.clusterRouterBase=${K8S_CLUSTER_ROUTER_BASE}
 
 echo "Waiting for backstage deployment..."
@@ -126,7 +126,7 @@ BACKSTAGE_URL="https://backstage-showcase.backstage-os-eu-de-2-bx2-c74b3ed44ce86
 BACKSTAGE_URL_RESPONSE=$(curl -Is "$BACKSTAGE_URL" | head -n 1)
 echo "$BACKSTAGE_URL_RESPONSE"
 
-cd $DIR/e2e-test
+cd $WORKING_DIR/e2e-test
 yarn install
 
 Xvfb :99 &
