@@ -122,7 +122,7 @@ echo "Display pods for verification..."
 oc get pods -n ${NAME_SPACE}
 
 # Check if Backstage is up and running
-BACKSTAGE_URL_RESPONSE=$(curl -Is "$CYPRESS_baseUrl" | head -n 1)
+BACKSTAGE_URL_RESPONSE=$(curl -Is "${CYPRESS_baseUrl}" | head -n 1)
 echo "$BACKSTAGE_URL_RESPONSE"
 
 cd $WORKING_DIR/e2e-test
@@ -131,6 +131,6 @@ yarn install
 Xvfb :99 &
 export DISPLAY=:99
 
-yarn run cypress:run 
+yarn run cypress:run -- --config baseUrl=${CYPRESS_baseUrl}
 
 pkill Xvfb
