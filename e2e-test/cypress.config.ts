@@ -16,8 +16,7 @@ export default defineConfig({
   // Command timeout overridden for E2E tests
   e2e: {
     defaultCommandTimeout: 10000,
-    baseUrl:
-      "https://backstage-showcase.backstage-os-eu-de-2-bx2-c74b3ed44ce86949f501aefb2db80652-0000.eu-de.containers.appdomain.cloud",
+    baseUrl: "PLACE_HOLDER",
     specPattern: "cypress/e2e/**/*.spec.ts",
   },
 });

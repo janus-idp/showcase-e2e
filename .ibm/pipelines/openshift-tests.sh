@@ -122,8 +122,7 @@ echo "Display pods for verification..."
 oc get pods -n ${NAME_SPACE}
 
 # Check if Backstage is up and running
-BACKSTAGE_URL="https://backstage-showcase.backstage-os-eu-de-2-bx2-c74b3ed44ce86949f501aefb2db80652-0000.eu-de.containers.appdomain.cloud/"
-BACKSTAGE_URL_RESPONSE=$(curl -Is "$BACKSTAGE_URL" | head -n 1)
+BACKSTAGE_URL_RESPONSE=$(curl -Is "$CYPRESS_baseUrl" | head -n 1)
 echo "$BACKSTAGE_URL_RESPONSE"
 
 cd $WORKING_DIR/e2e-test
