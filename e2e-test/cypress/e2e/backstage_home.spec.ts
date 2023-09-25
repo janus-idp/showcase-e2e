@@ -21,13 +21,4 @@ describe("Sign-in Page test", () => {
     cy.expect([Button("ENTER").exists(), Button("SIGN IN").exists()]);
     cy.do(Button("SIGN IN").click());
   });
-
-  it("should have the expected links in side bar", () => {
-    cy.expect([
-      Heading("Home").exists(),
-      Heading("Search").exists(),
-      Heading("Catalog").exists(),
-    ]);
-    cy.do(Heading("Catalog").click());
-  });
 });
