@@ -112,13 +112,7 @@ sleep 45
 echo "Display pods for verification..."
 oc get pods -n ${NAME_SPACE}
 
-# oc port-forward -n backstage svc/backstage 7007:http-backend &
-# # Store the PID of the background process
-# PID=$!
-
-# sleep 15
-
-# # Check if Backstage is up and running
+# Check if Backstage is up and running
 BACKSTAGE_URL="https://backstage-showcase.backstage-os-eu-de-2-bx2-c74b3ed44ce86949f501aefb2db80652-0000.eu-de.containers.appdomain.cloud/"
 BACKSTAGE_URL_RESPONSE=$(curl -Is "$BACKSTAGE_URL" | head -n 1)
 echo "$BACKSTAGE_URL_RESPONSE"
@@ -135,9 +129,5 @@ pkill Xvfb
 
 cd $WORKING_DIR
 
-# # Send Ctrl+C to the process
-# kill -INT $PID
-
-# helm uninstall ${RELEASE_NAME} -n ${NAME_SPACE}
-
+helm uninstall ${RELEASE_NAME} -n ${NAME_SPACE}
 rm -rf ~/tmpbin
