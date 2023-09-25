@@ -1,6 +1,6 @@
 import {
   Heading,
-  // Button,
+  Button,
   // Page,
   // TextField,
   // Link,
@@ -8,13 +8,17 @@ import {
   // Details,
 } from "@interactors/html";
 
-describe("Home Page test", () => {
+describe("Sign-in Page test", () => {
   beforeEach(() => {
     cy.login();
   });
 
   it("should have the expected links in side bar", () => {
-    cy.expect([Heading("Home").exists(), Heading("Search").exists()]);
-    cy.do(Heading("Home").click());
+    cy.expect([
+      Heading("Red Hat Developer Hub").exists(),
+      Heading("Select a sign-in method").exists(),
+    ]);
+    cy.expect([Button("ENTER").exists(), Button("SIGN IN").exists()]);
+    cy.do(Button("SIGN IN").click());
   });
 });
