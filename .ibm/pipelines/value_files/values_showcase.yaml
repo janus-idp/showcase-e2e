@@ -58,7 +58,7 @@ upstream:
       registry: quay.io
       repository: janus-idp/backstage-showcase
       # 'latest' build is broken and using the nightly build temporarily
-      tag: 'nightly-20230920'
+      tag: 'nightly-20230925'
     installDir: /app
     replicas: 1
   clusterDomain: cluster.local
