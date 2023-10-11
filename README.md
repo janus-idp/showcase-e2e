@@ -1,2 +1,2 @@
 # showcase-e2e
-Integration tests for Showcase
+Showcase end-to-end test
