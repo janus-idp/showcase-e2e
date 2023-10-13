@@ -57,8 +57,7 @@ upstream:
       # obtain test image from https://quay.io/repository/janus-idp/backstage-showcase
       registry: quay.io
       repository: janus-idp/backstage-showcase
-      # 'latest' build is broken and using the nightly build temporarily
-      tag: 'nightly-20230925'
+      tag: 'next'
     installDir: /app
     replicas: 1
   clusterDomain: cluster.local
