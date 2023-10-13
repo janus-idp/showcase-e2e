@@ -95,7 +95,8 @@ ibmcloud plugin install -f container-registry
 ibmcloud plugin install -f kubernetes-service
 
 # Using pipeline configuration - environment properties
-ibmcloud login -r "${IBM_REGION}" -g "${IBM_RSC_GROUP}" --apikey "${SERVICE_ID_API_KEY}"
+# ibmcloud login -r "${IBM_REGION}" -g "${IBM_RSC_GROUP}" --apikey "${SERVICE_ID_API_KEY}"
+ibmcloud login -r "${IBM_REGION}" --apikey "${SERVICE_ID_API_KEY}"
 ibmcloud oc cluster config --cluster "${OPENSHIFT_CLUSTER_ID}"
 
 install_oc
