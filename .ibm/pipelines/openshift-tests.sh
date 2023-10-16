@@ -10,7 +10,7 @@ function cleanup {
 }
 
 # This will run the 'cleanup' function on exit, regardless of exit status:
-# trap cleanup EXIT
+trap cleanup EXIT
 
 add_helm_repos() {
     # check installed helm version
@@ -172,12 +172,12 @@ oc get pods -n ${NAME_SPACE}
 BACKSTAGE_URL_RESPONSE=$(curl -Is "https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}" | head -n 1)
 echo "$BACKSTAGE_URL_RESPONSE"
 
-# cd $WORKING_DIR/e2e-test
-# yarn install
+cd $WORKING_DIR/e2e-test
+yarn install
 
-# Xvfb :99 &
-# export DISPLAY=:99
+Xvfb :99 &
+export DISPLAY=:99
 
-# yarn run cypress:run --config baseUrl="https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}"
+yarn run cypress:run --config baseUrl="https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}"
 
-# pkill Xvfb
+pkill Xvfb
