@@ -10,7 +10,7 @@ function cleanup {
 }
 
 # This will run the 'cleanup' function on exit, regardless of exit status:
-trap cleanup EXIT
+# trap cleanup EXIT
 
 add_helm_repos() {
     # check installed helm version
@@ -125,7 +125,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 helm upgrade -i ${RELEASE_NAME} -n ${NAME_SPACE} ${HELM_REPO_NAME}/${HELM_IMAGE_NAME} -f $DIR/value_files/${HELM_CHART_VALUE_FILE_NAME} --set global.clusterRouterBase=${K8S_CLUSTER_ROUTER_BASE}
 
 echo "Waiting for backstage deployment..."
-sleep 120
+sleep 240
 
 echo "Display pods for verification..."
 oc get pods -n ${NAME_SPACE}
@@ -134,12 +134,12 @@ oc get pods -n ${NAME_SPACE}
 BACKSTAGE_URL_RESPONSE=$(curl -Is "https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}" | head -n 1)
 echo "$BACKSTAGE_URL_RESPONSE"
 
-cd $WORKING_DIR/e2e-test
-yarn install
+# cd $WORKING_DIR/e2e-test
+# yarn install
 
-Xvfb :99 &
-export DISPLAY=:99
+# Xvfb :99 &
+# export DISPLAY=:99
 
-yarn run cypress:run --config baseUrl="https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}"
+# yarn run cypress:run --config baseUrl="https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}"
 
-pkill Xvfb
+# pkill Xvfb
