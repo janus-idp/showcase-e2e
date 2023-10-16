@@ -127,6 +127,13 @@ sed -i "s/namespace:.*/namespace: $NAME_SPACE/g" $DIR/resources/cluster_role_bin
 
 sed -i "s/backstage.io\/kubernetes-id:.*/backstage.io\/kubernetes-id: $K8S_PLUGIN_ANNOTATION/g" $DIR/resources/deployment/deployment-test-app-component.yaml
 
+sed -i "s/GITHUB_APP_APP_ID:.*/GITHUB_APP_APP_ID: $GITHUB_APP_APP_ID/g" $DIR/auth/secrets-rhdh-secrets.yaml
+sed -i "s/GITHUB_APP_CLIENT_ID:.*/GITHUB_APP_CLIENT_ID: $GITHUB_APP_CLIENT_ID/g" $DIR/auth/secrets-rhdh-secrets.yaml
+sed -i "s/GITHUB_APP_PRIVATE_KEY:.*/GITHUB_APP_PRIVATE_KEY: $GITHUB_APP_PRIVATE_KEY/g" $DIR/auth/secrets-rhdh-secrets.yaml
+sed -i "s/GITHUB_APP_CLIENT_SECRET:.*/GITHUB_APP_CLIENT_SECRET: $GITHUB_APP_CLIENT_SECRET/g" $DIR/auth/secrets-rhdh-secrets.yaml
+sed -i "s/GITHUB_APP_WEBHOOK_URL:.*/GITHUB_APP_WEBHOOK_URL: $GITHUB_APP_WEBHOOK_URL/g" $DIR/auth/secrets-rhdh-secrets.yaml
+sed -i "s/GITHUB_APP_WEBHOOK_SECRET:.*/GITHUB_APP_WEBHOOK_SECRET: $GITHUB_APP_WEBHOOK_SECRET/g" $DIR/auth/secrets-rhdh-secrets.yaml
+
 oc apply -f $DIR/resources/service_account/service-account-rhdh.yaml --namespace=${NAME_SPACE}
 oc apply -f $DIR/auth/service-account-rhdh-secret.yaml --namespace=${NAME_SPACE}
 oc apply -f $DIR/auth/secrets-rhdh-secrets.yaml --namespace=${NAME_SPACE}
