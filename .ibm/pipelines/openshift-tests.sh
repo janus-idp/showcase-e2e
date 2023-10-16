@@ -104,7 +104,15 @@ oc version --client
 # oc login -u apikey -p "${SERVICE_ID_API_KEY}" --server="${IBM_OPENSHIFT_ENDPOINT}"
 oc login --token=${K8S_CLUSTER_TOKEN} --server=${K8S_CLUSTER_URL}
 
-oc project ${NAME_SPACE}
+# create a name space if not exist
+if ! oc get namespace ${NAME_SPACE} > /dev/null 2>&1; then
+    oc create namespace ${NAME_SPACE}
+else
+    echo "Namespace ${NAME_SPACE} already exists!"
+fi
+
+oc config set-context --current --namespace=${NAME_SPACE}
+
 WORKING_DIR=$(pwd)
 
 install_helm
