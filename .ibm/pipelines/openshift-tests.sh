@@ -117,47 +117,45 @@ fi
 
 oc config set-context --current --namespace=${NAME_SPACE}
 
-WORKING_DIR=$(pwd)
-
 install_helm
-cd $WORKING_DIR
+cd $DIR
 
 # Change the namespace of the resources to the one namespace set above
-sed -i '' "s/namespace:.*/namespace: $NAME_SPACE/g" $DIR/../resources/service_account/service-account-rhdh.yaml
-sed -i '' "s/namespace:.*/namespace: $NAME_SPACE/g" $DIR/../resources/cluster_role_binding/cluster-role-binding-k8s.yaml
-sed -i '' "s/namespace:.*/namespace: $NAME_SPACE/g" $DIR/../resources/cluster_role_binding/cluster-role-binding-ocm.yaml
+sed -i "s/namespace:.*/namespace: $NAME_SPACE/g" $DIR/resources/service_account/service-account-rhdh.yaml
+sed -i "s/namespace:.*/namespace: $NAME_SPACE/g" $DIR/resources/cluster_role_binding/cluster-role-binding-k8s.yaml
+sed -i "s/namespace:.*/namespace: $NAME_SPACE/g" $DIR/resources/cluster_role_binding/cluster-role-binding-ocm.yaml
 
-sed -i '' "s/backstage.io\/kubernetes-id:.*/backstage.io\/kubernetes-id: $K8S_PLUGIN_ANNOTATION/g" $DIR/../resources/deployment/deployment-test-app-component.yaml
+sed -i "s/backstage.io\/kubernetes-id:.*/backstage.io\/kubernetes-id: $K8S_PLUGIN_ANNOTATION/g" $DIR/resources/deployment/deployment-test-app-component.yaml
 
-oc apply -f $DIR/../resources/service_account/service-account-rhdh.yaml --namespace=${NAME_SPACE}
-oc apply -f $DIR/../auth/service-account-rhdh-secret.yaml --namespace=${NAME_SPACE}
-oc apply -f $DIR/../auth/secrets-rhdh-secrets.yaml --namespace=${NAME_SPACE}
+oc apply -f $DIR/resources/service_account/service-account-rhdh.yaml --namespace=${NAME_SPACE}
+oc apply -f $DIR/auth/service-account-rhdh-secret.yaml --namespace=${NAME_SPACE}
+oc apply -f $DIR/auth/secrets-rhdh-secrets.yaml --namespace=${NAME_SPACE}
 
-oc apply -f $DIR/../resources/deployment/deployment-test-app-component.yaml --namespace=${NAME_SPACE}
+oc apply -f $DIR/resources/deployment/deployment-test-app-component.yaml --namespace=${NAME_SPACE}
 
 oc new-app https://github.com/janus-qe/test-backstage-customization-provider --namespace=${NAME_SPACE}
 oc expose svc/test-backstage-customization-provider --namespace=${NAME_SPACE}
 
-oc apply -f $DIR/../resources/cluster_role/cluster-role-k8s.yaml 
-oc apply -f $DIR/../resources/cluster_role_binding/cluster-role-binding-k8s.yaml 
-oc apply -f $DIR/../resources/cluster_role/cluster-role-ocm.yaml
-oc apply -f $DIR/../resources/cluster_role_binding/cluster-role-binding-ocm.yaml
+oc apply -f $DIR/resources/cluster_role/cluster-role-k8s.yaml 
+oc apply -f $DIR/resources/cluster_role_binding/cluster-role-binding-k8s.yaml 
+oc apply -f $DIR/resources/cluster_role/cluster-role-ocm.yaml
+oc apply -f $DIR/resources/cluster_role_binding/cluster-role-binding-ocm.yaml
 
 # obtain K8S_CLUSTER_NAME, K8S_CLUSTER_API_SERVER_URL and add them to secrets-rhdh-secrets.yaml
 # K8S_SERVICE_ACCOUNT_TOKEN will be replaced
-oc get secret rhdh-k8s-plugin-secret -o yaml > $DIR/../auth/service-account-rhdh-token.yaml
+oc get secret rhdh-k8s-plugin-secret -o yaml > $DIR/auth/service-account-rhdh-token.yaml
 
-TOKEN=$(grep 'token:' $DIR/../auth/service-account-rhdh-token.yaml | awk '{print $2}')
+TOKEN=$(grep 'token:' $DIR/auth/service-account-rhdh-token.yaml | awk '{print $2}')
 
-sed -i '' "s/K8S_SERVICE_ACCOUNT_TOKEN:.*/K8S_SERVICE_ACCOUNT_TOKEN: $TOKEN/g" $DIR/auth/secrets-rhdh-secrets.yaml
+sed -i "s/K8S_SERVICE_ACCOUNT_TOKEN:.*/K8S_SERVICE_ACCOUNT_TOKEN: $TOKEN/g" $DIR/auth/secrets-rhdh-secrets.yaml
 
 # Cleanup temp file
-rm $DIR/../auth/service-account-rhdh-token.yaml
+rm $DIR/auth/service-account-rhdh-token.yaml
 
-# oc apply -f $DIR/../auth/rhdh-quay-pull-secret.yaml --namespace=${NAME_SPACE}
+# oc apply -f $DIR/auth/rhdh-quay-pull-secret.yaml --namespace=${NAME_SPACE}
 # re-apply with the updated cluster service account token
-oc apply -f $DIR/../auth/secrets-rhdh-secrets.yaml --namespace=${NAME_SPACE}
-oc apply -f $DIR/../resources/config_map/configmap-app-config-rhdh.yaml --namespace=${NAME_SPACE}
+oc apply -f $DIR/auth/secrets-rhdh-secrets.yaml --namespace=${NAME_SPACE}
+oc apply -f $DIR/resources/config_map/configmap-app-config-rhdh.yaml --namespace=${NAME_SPACE}
 
 add_helm_repos
 
