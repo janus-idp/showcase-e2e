@@ -5,6 +5,7 @@ set -e
 function cleanup {
     echo "Cleaning up before exiting"
     helm uninstall ${RELEASE_NAME} -n ${NAME_SPACE}
+    oc delete namespace ${NAME_SPACE}
     rm -rf ~/tmpbin
 }
 
@@ -124,7 +125,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 helm upgrade -i ${RELEASE_NAME} -n ${NAME_SPACE} ${HELM_REPO_NAME}/${HELM_IMAGE_NAME} -f $DIR/value_files/${HELM_CHART_VALUE_FILE_NAME} --set global.clusterRouterBase=${K8S_CLUSTER_ROUTER_BASE}
 
 echo "Waiting for backstage deployment..."
-sleep 45
+sleep 120
 
 echo "Display pods for verification..."
 oc get pods -n ${NAME_SPACE}
