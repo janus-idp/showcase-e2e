@@ -118,7 +118,6 @@ fi
 oc config set-context --current --namespace=${NAME_SPACE}
 
 install_helm
-
 cd $DIR
 
 # Change the namespace of the resources to the one namespace set above
