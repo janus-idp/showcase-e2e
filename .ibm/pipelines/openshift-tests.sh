@@ -153,6 +153,7 @@ sed -i "s/K8S_SERVICE_ACCOUNT_TOKEN:.*/K8S_SERVICE_ACCOUNT_TOKEN: $TOKEN/g" $DIR
 rm $DIR/auth/service-account-rhdh-token.yaml
 
 # oc apply -f $DIR/auth/rhdh-quay-pull-secret.yaml --namespace=${NAME_SPACE}
+
 # re-apply with the updated cluster service account token
 oc apply -f $DIR/auth/secrets-rhdh-secrets.yaml --namespace=${NAME_SPACE}
 oc apply -f $DIR/resources/config_map/configmap-app-config-rhdh.yaml --namespace=${NAME_SPACE}
