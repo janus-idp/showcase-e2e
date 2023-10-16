@@ -54,7 +54,7 @@ upstream:
       pullSecrets:
         - rhdh-pull-secret
       
-      # obtain test image from https://quay.io/repository/janus-idp/backstage-showcase
+      # using test image from https://quay.io/repository/janus-idp/backstage-showcase
       registry: quay.io
       repository: janus-idp/backstage-showcase
       tag: 'next'
