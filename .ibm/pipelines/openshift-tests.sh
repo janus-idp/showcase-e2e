@@ -172,7 +172,7 @@ oc get pods -n ${NAME_SPACE}
 BACKSTAGE_URL_RESPONSE=$(curl -Is "https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}" | head -n 1)
 echo "$BACKSTAGE_URL_RESPONSE"
 
-cd $WORKING_DIR/e2e-test
+cd $DIR/../../e2e-test
 yarn install
 
 Xvfb :99 &
