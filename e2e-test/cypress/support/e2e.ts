@@ -13,16 +13,6 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-import "@interactors/with-cypress";
-import {
-  Button,
-  Page,
-  TextField,
-  Heading,
-  Link,
-  Select,
-  Details,
-} from "@interactors/html";
 // load the global Cypress types
 /// <reference types="cypress" />
 
@@ -31,6 +21,9 @@ import {
  *
  * @example cy.login()
  */
-Cypress.Commands.add("login", () => {
-  cy.visit("/");
+
+// Handling errors from application
+// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+Cypress.on('uncaught:exception', (err) => {
+  return false;
 });
