@@ -68,6 +68,13 @@ data:
           default:
             id: development
             orgUrl: '${GITHUB_ORG_URL}'
+        keycloakOrg:
+          default:
+            baseUrl: ${KEYCLOAK_URL}
+            loginRealm: ${KEYCLOAK_REALM}
+            realm: ${KEYCLOAK_REALM}
+            clientId: ${KEYCLOAK_CLIENT_ID}
+            clientSecret: ${KEYCLOAK_CLIENT_SECRET}
       import:
         entityFilename: catalog-info.yaml
         # pullRequestBranchName: rhdh-integration
@@ -136,3 +143,4 @@ data:
       github: ${GITHUB_ENABLED}
       kubernetes: ${K8S_ENABLED}
       githubOrg: ${GITHUBORG_ENABLED}
+      keycloak: true

@@ -135,6 +135,11 @@ sed -i "s/GITHUB_APP_CLIENT_SECRET:.*/GITHUB_APP_CLIENT_SECRET: $GITHUB_APP_CLIE
 sed -i "s/GITHUB_APP_WEBHOOK_URL:.*/GITHUB_APP_WEBHOOK_URL: $GITHUB_APP_WEBHOOK_URL/g" $DIR/auth/secrets-rhdh-secrets.yaml
 sed -i "s/GITHUB_APP_WEBHOOK_SECRET:.*/GITHUB_APP_WEBHOOK_SECRET: $GITHUB_APP_WEBHOOK_SECRET/g" $DIR/auth/secrets-rhdh-secrets.yaml
 
+sed -i "s|KEYCLOAK_URL:.*|KEYCLOAK_URL: $KEYCLOAK_URL|g" $DIR/auth/secrets-rhdh-secrets.yaml
+sed -i "s|KEYCLOAK_REALM:.*|KEYCLOAK_REALM: $KEYCLOAK_REALM|g" $DIR/auth/secrets-rhdh-secrets.yaml
+sed -i "s|KEYCLOAK_CLIENT_SECRET:.*|KEYCLOAK_CLIENT_SECRET: $KEYCLOAK_CLIENT_SECRET|g" $DIR/auth/secrets-rhdh-secrets.yaml
+sed -i "s|KEYCLOAK_CLIENT_ID:.*|KEYCLOAK_CLIENT_ID: $KEYCLOAK_CLIENT_ID|g" $DIR/auth/secrets-rhdh-secrets.yaml
+
 oc apply -f $DIR/resources/service_account/service-account-rhdh.yaml --namespace=${NAME_SPACE}
 oc apply -f $DIR/auth/service-account-rhdh-secret.yaml --namespace=${NAME_SPACE}
 oc apply -f $DIR/auth/secrets-rhdh-secrets.yaml --namespace=${NAME_SPACE}

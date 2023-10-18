@@ -6,6 +6,19 @@ export class UIhelper {
         return cy.contains(UIhelperPO.buttonLabel, label).click();
     }
 
+    static isHeaderTitleExists(label: string): Cypress.Chainable<boolean> {
+        return cy.get('h2[data-testid="header-title"]')
+            .then(element => {
+                return element.text() === label
+            });
+    }
+
+
+
+    static verifyDivHasText(divText: string) {
+        return cy.contains('div', new RegExp(`^\\s*${divText}\\s*$`)).scrollIntoView().should('be.visible');
+    }
+
     static clickLink(linkText: string) {
         return cy.contains('a', new RegExp(`^\\s*${linkText}\\s*$`)).should('be.visible').click();
     }
