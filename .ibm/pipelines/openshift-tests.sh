@@ -85,7 +85,12 @@ install_helm() {
 
 LOGFILE="pr-${GIT_PR_NUMBER}-openshift-tests-${BUILD_NUMBER}"
 echo "Log file: ${LOGFILE}"
-# source ./.ibm/pipelines/functions.sh
+TEST_NAME="Showcase-e2e Tests on OpenShift"
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo "$DIR"
+
+source $DIR/functions.sh
 
 # install ibmcloud
 install_ibmcloud
@@ -94,6 +99,7 @@ ibmcloud version
 ibmcloud config --check-version=false
 ibmcloud plugin install -f container-registry
 ibmcloud plugin install -f kubernetes-service
+ibmcloud plugin install -f cloud-object-storage
 
 # Using pipeline configuration - environment properties
 ibmcloud login -r "${IBM_REGION}" -g "${IBM_RSC_GROUP}" --apikey "${SERVICE_ID_API_KEY}"
@@ -103,9 +109,6 @@ install_oc
 
 oc version --client
 # oc login -u apikey -p "${SERVICE_ID_API_KEY}" --server="${IBM_OPENSHIFT_ENDPOINT}"
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-echo "$DIR"
-
 oc login --token=${K8S_CLUSTER_TOKEN} --server=${K8S_CLUSTER_URL}
 
 # refresh the name space if exists
@@ -186,6 +189,16 @@ yarn install
 Xvfb :99 &
 export DISPLAY=:99
 
-yarn run cypress:run --config baseUrl="https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}"
+(
+  echo "Running showcase-e2e tests"
+  yarn run cypress:run --config baseUrl="https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}"
+) |& tee "/tmp/${LOGFILE}"
+
+RESULT=${PIPESTATUS[0]}
+
+save_logs "${LOGFILE}" "${TEST_NAME}" ${RESULT}
+# save_results "${PWD}/showcase-e2e-test.xml" "${LOGFILE}" "${TEST_NAME}" "${BUILD_NUMBER}"
 
 pkill Xvfb
+
+exit ${RESULT}
