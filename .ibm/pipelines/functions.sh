@@ -9,16 +9,18 @@ save_logs() {
     NAME="$2"
     RESULT="$3"
 
-    ansi2html <"/tmp/${LOGFILE}" >"/tmp/${LOGFILE}.html"
-    ansi2txt <"/tmp/${LOGFILE}" >"/tmp/${LOGFILE}.txt"
+    # ansi2html <"/tmp/${LOGFILE}" >"/tmp/${LOGFILE}.html"
+    # ansi2txt <"/tmp/${LOGFILE}" >"/tmp/${LOGFILE}.txt"
 
     # ibmcloud login --apikey "${API_KEY}"
     # ibmcloud target -g "${IBM_RESOURCE_GROUP}"  -r "${IBM_REGION}"
     CRN=$(ibmcloud resource service-instance ${IBM_COS} --output json | jq -r .[0].guid)
     ibmcloud cos config crn --crn "${CRN}"
 
-    ibmcloud cos upload --bucket "${IBM_BUCKET}" --key "${LOGFILE}.html" --file "/tmp/${LOGFILE}.html"
-    ibmcloud cos upload --bucket "${IBM_BUCKET}" --key "${LOGFILE}.txt" --file "/tmp/${LOGFILE}.txt"
+    ibmcloud cos upload --bucket "${IBM_BUCKET}" --key "${LOGFILE}" --file "/tmp/${LOGFILE}"
+
+    # ibmcloud cos upload --bucket "${IBM_BUCKET}" --key "${LOGFILE}.html" --file "/tmp/${LOGFILE}.html"
+    # ibmcloud cos upload --bucket "${IBM_BUCKET}" --key "${LOGFILE}.txt" --file "/tmp/${LOGFILE}.txt"
 
     BASE_URL="https://s3.${IBM_REGION}.cloud-object-storage.appdomain.cloud/${IBM_BUCKET}"
 
@@ -29,7 +31,7 @@ save_logs() {
     fi
     cat <<EOF | ${GIT_PR_NUMBER} -pipeline "${NAME}"
 ${NAME} on commit ${GIT_COMMIT} finished ${STATUS}.
-View logs: [TXT](${BASE_URL}/${LOGFILE}.txt) [HTML](${BASE_URL}/${LOGFILE}.html)
+View logs: [TXT](${BASE_URL}/${LOGFILE})
 EOF
 }
 
