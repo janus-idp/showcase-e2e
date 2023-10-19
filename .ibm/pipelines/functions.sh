@@ -14,6 +14,10 @@ save_logs() {
 
     # ibmcloud login --apikey "${API_KEY}"
     # ibmcloud target -g "${IBM_RESOURCE_GROUP}"  -r "${IBM_REGION}"
+    sudo apt update
+    sudo apt install -y jq
+    jq --version
+
     CRN=$(ibmcloud resource service-instance ${IBM_COS} --output json | jq -r .[0].guid)
     ibmcloud cos config crn --crn "${CRN}"
 
