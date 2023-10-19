@@ -200,5 +200,4 @@ save_logs "${LOGFILE}" "${TEST_NAME}" ${RESULT}
 # save_results "${PWD}/showcase-e2e-test.xml" "${LOGFILE}" "${TEST_NAME}" "${BUILD_NUMBER}"
 
 pkill Xvfb
-
 exit ${RESULT}
