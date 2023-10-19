@@ -108,15 +108,12 @@ echo "$DIR"
 
 oc login --token=${K8S_CLUSTER_TOKEN} --server=${K8S_CLUSTER_URL}
 
-# create a name space if not exist
-if ! oc get namespace ${NAME_SPACE} > /dev/null 2>&1; then
-    oc create namespace ${NAME_SPACE}
-else
-    # refresh a name space if exists
+# refresh the name space if exists
+if oc get namespace ${NAME_SPACE} > /dev/null 2>&1; then
     echo "Namespace ${NAME_SPACE} already exists! refreshing namespace"
     oc delete namespace ${NAME_SPACE}
-    oc create namespace ${NAME_SPACE}
 fi
+oc create namespace ${NAME_SPACE}
 
 oc config set-context --current --namespace=${NAME_SPACE}
 
