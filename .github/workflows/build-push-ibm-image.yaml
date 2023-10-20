@@ -1,0 +1,49 @@
+name: Build and Push IBM Cloud Image
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.ibm/images/Dockerfile'
+      - '.github/workflows/build-push-ibm-image.yaml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.ibm/images/Dockerfile'
+      - '.github/workflows/build-push-ibm-image.yaml'
+
+jobs:
+  build:
+    name: Build and push IBM Cloud image
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build Image
+      id: build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: ibmcloudtest-image
+        tags: v1.0
+        context: ./.ibm/images
+        containerfiles: |
+          ./.ibm/images/Dockerfile
+
+    # Podman Login action (https://github.com/redhat-actions/podman-login) also be used to log in,
+    # in which case 'username' and 'password' can be omitted.
+    - name: Push To quay.io
+      id: push-to-quay
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build-image.outputs.image }}
+        tags: ${{ steps.build-image.outputs.tags }}
+        registry: quay.io/joskimca
+        username: joskimca
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: Print image url
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
