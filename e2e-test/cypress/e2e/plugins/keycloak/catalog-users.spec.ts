@@ -3,14 +3,15 @@ import Keycloak from "../../../utils/keycloak/keycloak";
 import User from "../../../utils/keycloak/user";
 import Group from "../../../utils/keycloak/group";
 import {UIhelper} from "../../../utils/UIhelper";
+import {Common} from "../../../utils/Common";
 
 let keycloak: Keycloak;
 
 describe("Test Keycloak plugin", () => {
     before(() => {
+        Common.loginAsGuest();
         keycloak = new Keycloak();
         CatalogUsersPO.visitBaseURL();
-        loginAsGuest();
     });
     it('Users on keycloak should match users on backstage', () => {
         keycloak.getAuthenticationToken().then((token) => {
@@ -20,7 +21,7 @@ describe("Test Keycloak plugin", () => {
                 CatalogUsersPO.getListOfUsers().then((backStageUsers) => {
                     backStageUsers.each((index, backStageUser) => {
                         const userFound = keycloakUsers.find(user => user.username === backStageUser.textContent);
-                        if(userFound) {
+                        if (userFound) {
                             backStageUsersFound.push(userFound);
                         }
                     });
@@ -28,7 +29,7 @@ describe("Test Keycloak plugin", () => {
                     expect(keycloakUsers.length).to.eq(backStageUsersFound.length);
 
                     backStageUsersFound.forEach((backStageUser, index) => {
-                        checkUserDetails(keycloakUsers[index], backStageUser, token);
+                        checkUserDetails(keycloakUsers[index], token);
                     });
                 });
             });
@@ -36,19 +37,7 @@ describe("Test Keycloak plugin", () => {
 
     })
 
-    /**
-     * If it's the first time logging in, the user will be prompted to login as guest
-     * If not, the user will be logged in automatically
-     */
-    const loginAsGuest = () => {
-        UIhelper.isHeaderTitleExists('Select a sign-in method').then((isHeaderTitleExists) => {
-            if(isHeaderTitleExists) {
-                UIhelper.clickButton('Enter');
-            }
-        });
-    };
-
-    const checkUserDetails = (keycloakUser, backStageUser, token) => {
+    const checkUserDetails = (keycloakUser, token) => {
         CatalogUsersPO.visitUserPage(keycloakUser.username);
         CatalogUsersPO.getEmailLink().should('be.visible');
         UIhelper.verifyDivHasText(`${keycloakUser.firstName} ${keycloakUser.lastName}`);

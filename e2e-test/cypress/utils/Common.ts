@@ -6,7 +6,6 @@ export class Common {
 
     static loginAsGuest() {
         cy.visit('/')
-        UIhelper.verifyHeading("Red Hat Developer Hub");
         UIhelper.verifyHeading("Select a sign-in method");
         UIhelper.clickButton('Enter')
     }

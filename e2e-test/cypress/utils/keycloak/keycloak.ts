@@ -3,17 +3,16 @@ import Group from "./group";
 
 class Keycloak {
 
-    private readonly baseURL;
-    private readonly realm;
-    private readonly clientId;
-    private readonly clientSecret;
+    private readonly baseURL: string;
+    private readonly realm :string;
+    private readonly clientId :string;
+    private readonly clientSecret :string;
 
     constructor() {
         this.baseURL = Cypress.env("KEYCLOAK_URL");
         this.realm = Cypress.env("KEYCLOAK_REALM");
         this.clientSecret = Cypress.env("KEYCLOAK_CLIENT_SECRET");
         this.clientId = Cypress.env("KEYCLOAK_CLIENT_ID");
-
     }
 
     getAuthenticationToken(): Cypress.Chainable<string> {

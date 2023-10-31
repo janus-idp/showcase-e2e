@@ -15,7 +15,7 @@ on [configmap-app-config-rhdh.yaml](.ibm/pipelines/resources/config_map/configma
 we need to set the envs encoded as Base64 in the
 [secrets-rhdh-secrets.yaml](.ibm/pipelines/auth/secrets-rhdh-secrets.yaml) .
 You can use temporary values for the secrets because it can be replaced by the pipeline. 
-Add the environments needed in our [pipeline](https://cloud.ibm.com/devops/pipelines/132b3ce1-c23c-486a-a97c-38f19e5b14c6/config?env_id=ibm:yp:eu-de) as Base64 encoded values and using secure property.
+Add the environments needed in our as Base64 encoded values and using secure property.
 
 To replace the values into secrets-rhdh-secrets.yaml we need to create the replace function using
 [openshift-tests.sh](.ibm/pipelines/openshift-tests.sh) script. For example:
