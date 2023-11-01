@@ -1,5 +1,5 @@
-import { UIhelperPO } from "../support/pageObjects/global-obj";
-import { Common } from "./Common";
+import {UIhelperPO} from "../support/pageObjects/global-obj";
+import {Common} from "./Common";
 
 export class UIhelper {
   static clickButton(label: string, options?: { force?: boolean }) {
@@ -78,4 +78,11 @@ export class UIhelper {
   static clickTab(tabName: string) {
     cy.contains(UIhelperPO.tabs, new RegExp(`^\\s*${tabName}\\s*$`)).click();
   }
+
+  static verifyCellsInTable(texts: Array<RegExp>) {
+    texts.forEach(text => {
+      cy.contains(UIhelperPO.MuiTableCell, text).should('be.visible');
+    });
+  }
+
 }

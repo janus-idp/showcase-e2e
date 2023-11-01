@@ -1,7 +1,7 @@
-import { UIhelper } from "../utils/UIhelper";
-import { HomePage } from "../support/pages/HomePage";
-import { Common } from "../utils/Common";
-import { gpts } from "../support/testData/gpts";
+import {UIhelper} from "../utils/UIhelper";
+import {HomePage} from "../support/pages/HomePage";
+import {Common} from "../utils/Common";
+import {gpts} from "../support/testData/gpts";
 
 describe("Guest Signin Happy path", () => {
   before(() => {

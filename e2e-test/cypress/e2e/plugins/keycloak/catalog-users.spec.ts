@@ -15,7 +15,7 @@ describe("Test Keycloak plugin", () => {
     });
     it('Users on keycloak should match users on backstage', () => {
         keycloak.getAuthenticationToken().then((token) => {
-            const backStageUsersFound = [];
+            const backStageUsersFound: User[] = [];
 
             keycloak.getUsers(token).then((keycloakUsers: User[]) => {
                 CatalogUsersPO.getListOfUsers().then((backStageUsers) => {
@@ -37,7 +37,7 @@ describe("Test Keycloak plugin", () => {
 
     })
 
-    const checkUserDetails = (keycloakUser, token) => {
+    const checkUserDetails = (keycloakUser: User, token: string) => {
         CatalogUsersPO.visitUserPage(keycloakUser.username);
         CatalogUsersPO.getEmailLink().should('be.visible');
         UIhelper.verifyDivHasText(`${keycloakUser.firstName} ${keycloakUser.lastName}`);

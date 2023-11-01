@@ -1,9 +1,6 @@
-import {
-  CatalogImport,
-  BackstageShowcase,
-} from "../support/pages/CatalogImport";
-import { Common } from "../utils/Common";
-import { UIhelper } from "../utils/UIhelper";
+import {BackstageShowcase, CatalogImport,} from "../support/pages/CatalogImport";
+import {Common} from "../utils/Common";
+import {UIhelper} from "../utils/UIhelper";
 
 describe("GitHub Happy path", () => {
   const component =
