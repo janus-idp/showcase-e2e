@@ -1,6 +1,4 @@
-# showcase-e2e
-
-Showcase end-to-end tests
+# Showcase end-to-end tests
 
 ### How to setup backstage configuration during the pipeline
 
