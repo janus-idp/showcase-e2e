@@ -16,10 +16,12 @@
 // load the global Cypress types
 /// <reference types="cypress" />
 
-import './hooks'
+import "./hooks";
+import installLogsCollector from "cypress-terminal-report/src/installLogsCollector";
 
+installLogsCollector();
 // Handling errors from application
 // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-Cypress.on('uncaught:exception', (err) => {
+Cypress.on("uncaught:exception", (err) => {
   return false;
 });

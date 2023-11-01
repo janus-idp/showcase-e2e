@@ -85,7 +85,11 @@ install_helm() {
 
 LOGFILE="pr-${GIT_PR_NUMBER}-openshift-tests-${BUILD_NUMBER}"
 echo "Log file: ${LOGFILE}"
-# source ./.ibm/pipelines/functions.sh
+TEST_NAME="Showcase e2e Tests"
+
+source ./.ibm/pipelines/functions.sh
+
+skip_if_only
 
 # install ibmcloud
 install_ibmcloud
@@ -176,7 +180,7 @@ add_helm_repos
 helm upgrade -i ${RELEASE_NAME} -n ${NAME_SPACE} ${HELM_REPO_NAME}/${HELM_IMAGE_NAME} -f $DIR/value_files/${HELM_CHART_VALUE_FILE_NAME} --set global.clusterRouterBase=${K8S_CLUSTER_ROUTER_BASE}
 
 echo "Waiting for backstage deployment..."
-sleep 60
+sleep 120
 
 echo "Display pods for verification..."
 oc get pods -n ${NAME_SPACE}
@@ -191,6 +195,18 @@ yarn install
 Xvfb :99 &
 export DISPLAY=:99
 
-yarn run cypress:run --config baseUrl="https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}"
+(
+    set -e
+    echo "Using janus-idp/backstage-showcase:next image"
+    yarn run cypress:run --config baseUrl="https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}"
+    # Store the exit code of the previous command
+    EXIT_CODE=$?  
+    # Exit the subshell with the same exit code
+    exit $EXIT_CODE  
+) |& tee "/tmp/${LOGFILE}"
+
+RESULT=${PIPESTATUS[0]}
 
 pkill Xvfb
+
+save_logs "${LOGFILE}" "${TEST_NAME}" ${RESULT}
