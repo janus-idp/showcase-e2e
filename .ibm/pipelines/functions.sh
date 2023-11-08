@@ -5,18 +5,18 @@
 #  IBM_COS: Cloud Object Storage containing the bucket on which to save logs
 #  IBM_BUCKET: Bucket name on which to save logs
 save_logs() {
-    LOGFILE="$1"
+    OUTPUT_FILE_NAME="$1"
     NAME="$2"
     RESULT="$3"
 
-    ansi2html <"/tmp/${LOGFILE}" >"/tmp/${LOGFILE}.html"
+    ansi2html <"/tmp/${OUTPUT_FILE_NAME}" >"/tmp/${OUTPUT_FILE_NAME}.html"
     
     # disabled redundant login and target
     # ibmcloud login --apikey "${API_KEY}"
     # ibmcloud target -g "${IBM_RESOURCE_GROUP}"  -r "${IBM_REGION}"
     CRN=$(ibmcloud resource service-instance ${IBM_COS} --output json | jq -r .[0].guid)
     ibmcloud cos config crn --crn "${CRN}"
-    ibmcloud cos upload --bucket "${IBM_BUCKET}" --key "${LOGFILE}.html" --file "/tmp/${LOGFILE}.html" --content-type "text/html; charset=UTF-8"
+    ibmcloud cos upload --bucket "${IBM_BUCKET}" --key "${OUTPUT_FILE_NAME}.html" --file "/tmp/${OUTPUT_FILE_NAME}.html" --content-type "text/html; charset=UTF-8"
     
     BASE_URL="https://s3.${IBM_REGION}.cloud-object-storage.appdomain.cloud/${IBM_BUCKET}"
     if [[ $RESULT == "0" ]]; then
@@ -27,8 +27,25 @@ save_logs() {
 
     cat <<EOF | pr-commenter -key-from-env-var ROBOT_KEY -application-id=${GITHUB_APP_PR_COMMENTER_ID} -pr-comment=${GIT_PR_NUMBER} -repository=${GITHUB_REPOSITORY_NAME} -org=${GITHUB_ORG_NAME}
 ${NAME} on commit ${GIT_COMMIT} finished **${STATUS}**.
-View [test log](${BASE_URL}/${LOGFILE}.html)
+View [test log](${BASE_URL}/${OUTPUT_FILE_NAME}.html)
 EOF
+}
+
+save_junit() {
+    OUTPUT_FILE_NAME="$1"
+    NAME="$2"
+    RESULT="$3"
+
+    RESULTS_LOCATION="./cypress/results"
+
+    zip -r "/tmp/${OUTPUT_FILE_NAME}.zip" $RESULTS_LOCATION
+
+    # disabled redundant login and target
+    # ibmcloud login --apikey "${API_KEY}"
+    # ibmcloud target -g "${IBM_RESOURCE_GROUP}"  -r "${IBM_REGION}"
+    CRN=$(ibmcloud resource service-instance ${IBM_COS} --output json | jq -r .[0].guid)
+    ibmcloud cos config crn --crn "${CRN}"
+    ibmcloud cos upload --bucket "${IBM_BUCKET}" --key "${OUTPUT_FILE_NAME}.xml" --file "/tmp/${OUTPUT_FILE_NAME}.xml" --content-type "text/xml; charset=UTF-8"
 }
 
 skip_if_only() {

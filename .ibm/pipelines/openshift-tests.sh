@@ -2,8 +2,8 @@
 
 set -e
 
-# Variáveis globais
-LOGFILE="pr-${GIT_PR_NUMBER}-openshift-tests-${BUILD_NUMBER}"
+# Global variables
+OUTPUT_FILE_NAME="pr-${GIT_PR_NUMBER}-openshift-tests-${BUILD_NUMBER}"
 TEST_NAME="Showcase e2e Tests"
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -140,14 +140,16 @@ run_tests() {
     set -e
     echo "Using janus-idp/backstage-showcase:next image"
     yarn run cypress:run --config baseUrl="https://${RELEASE_NAME}-${NAME_SPACE}.${K8S_CLUSTER_ROUTER_BASE}"
-  ) |& tee "/tmp/${LOGFILE}"
+  ) |& tee "/tmp/${OUTPUT_FILE_NAME}"
 
   RESULT=${PIPESTATUS[0]}
 
   pkill Xvfb
 
-  save_logs "${LOGFILE}" "${TEST_NAME}" ${RESULT}
-
+  save_logs "${OUTPUT_FILE_NAME}" "${TEST_NAME}" ${RESULT}
+  if [ -z ${RESULT} ]; then
+    save_junit "${OUTPUT_FILE_NAME}" "${TEST_NAME}" ${RESULT}
+  fi
   exit ${RESULT}
 }
 
@@ -158,7 +160,7 @@ check_backstage_running() {
 }
 
 main() {
-  echo "Log file: ${LOGFILE}"
+  echo "Log file: ${OUTPUT_FILE_NAME}"
 
   source ./.ibm/pipelines/functions.sh
   skip_if_only
