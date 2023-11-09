@@ -35,11 +35,11 @@ save_junit() {
     OUTPUT_FILE_NAME="$1"
     NAME="$2"
 
-    RESULTS_LOCATION="./cypress/results"
+    RESULTS_LOCATION="./cypress/results/junit/*"
     JUNIT_ZIP_FILE="${OUTPUT_FILE_NAME}.zip"
-    JUNIT_ZIP_FILE_LOCATION="/tmp/${ZIP_FILE}"
+    JUNIT_ZIP_FILE_LOCATION="/tmp/${JUNIT_ZIP_FILE}"
 
-    zip -r $JUNIT_ZIP_FILE $RESULTS_LOCATION
+    zip -r $JUNIT_ZIP_FILE_LOCATION $RESULTS_LOCATION
 
     # disabled redundant login and target
     # ibmcloud login --apikey "${API_KEY}"
