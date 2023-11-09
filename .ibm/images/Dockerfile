@@ -59,6 +59,7 @@ RUN curl -fsSL https://clis.cloud.ibm.com/install/linux | sh && \
     ./install-oc-tools.sh --latest 4.11 && \
     apt-get update -y && \
     apt-get install -y sshpass jq colorized-logs && \
+    apt-get install -y zip && \
     rm -rf /var/lib/apt/lists/*
 
 # Set Go version and the expected SHA256 hash for verification
