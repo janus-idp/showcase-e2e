@@ -37,15 +37,19 @@ save_junit() {
     RESULT="$3"
 
     RESULTS_LOCATION="./cypress/results"
+    JUNIT_ZIP_FILE="${OUTPUT_FILE_NAME}.zip"
+    JUNIT_ZIP_FILE_LOCATION="/tmp/${ZIP_FILE}"
 
-    zip -r "/tmp/${OUTPUT_FILE_NAME}.zip" $RESULTS_LOCATION
+    zip -r $JUNIT_ZIP_FILE $RESULTS_LOCATION
 
     # disabled redundant login and target
     # ibmcloud login --apikey "${API_KEY}"
     # ibmcloud target -g "${IBM_RESOURCE_GROUP}"  -r "${IBM_REGION}"
     CRN=$(ibmcloud resource service-instance ${IBM_COS} --output json | jq -r .[0].guid)
     ibmcloud cos config crn --crn "${CRN}"
-    ibmcloud cos upload --bucket "${IBM_BUCKET}" --key "${OUTPUT_FILE_NAME}.xml" --file "/tmp/${OUTPUT_FILE_NAME}.xml" --content-type "text/xml; charset=UTF-8"
+    ibmcloud cos upload --bucket "${IBM_BUCKET}" --key "${JUNIT_ZIP_FILE}" --file "${JUNIT_ZIP_FILE_LOCATION}" --content-type "text/xml; charset=UTF-8"
+
+    curl -X POST "${SMEE_URL}" -H "Content-Type: application/json" -d '{"junit-archive": "'"${JUNIT_ZIP_FILE}"'"}'
 }
 
 skip_if_only() {
