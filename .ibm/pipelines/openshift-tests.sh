@@ -147,9 +147,7 @@ run_tests() {
   pkill Xvfb
 
   save_logs "${OUTPUT_FILE_NAME}" "${TEST_NAME}" ${RESULT}
-  if [ -z ${RESULT} ]; then
-    save_junit "${OUTPUT_FILE_NAME}" "${TEST_NAME}" ${RESULT}
-  fi
+  save_junit "${OUTPUT_FILE_NAME}" "${TEST_NAME}"
   exit ${RESULT}
 }
 

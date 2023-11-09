@@ -34,7 +34,6 @@ EOF
 save_junit() {
     OUTPUT_FILE_NAME="$1"
     NAME="$2"
-    RESULT="$3"
 
     RESULTS_LOCATION="./cypress/results"
     JUNIT_ZIP_FILE="${OUTPUT_FILE_NAME}.zip"
