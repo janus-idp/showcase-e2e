@@ -61,9 +61,9 @@ export class UIhelper {
     Common.waitForLoad();
   }
 
-  static verifyRowsInTable(rowTexts: string[]) {
+    static verifyRowsInTable(rowTexts: string[], elementRef = UIhelperPO.MuiTableRow) {
     rowTexts.forEach((rowText) => {
-      cy.contains(UIhelperPO.MuiTableRow, rowText)
+        cy.contains(elementRef, rowText)
         .scrollIntoView()
         .should("be.visible");
     });
@@ -84,5 +84,25 @@ export class UIhelper {
       cy.contains(UIhelperPO.MuiTableCell, text).should('be.visible');
     });
   }
+
+    static clickButtonByAriaLabel(label: string) {
+        return cy
+            .get(`[aria-label="${label}"]`)
+            .should('be.visible')
+            .click();
+    }
+
+    static clickButtonFromNthChild(parentRef: string, index: number, label: string) {
+        return cy
+            .contains(`${parentRef}:nth-child(${index}) ${UIhelperPO.buttonLabel}`, label)
+            .should('be.visible')
+            .click();
+    }
+
+    static verifyText(elementRef: string, text: string) {
+        cy.contains(elementRef, text)
+            .scrollIntoView()
+            .should('be.visible');
+    }
 
 }
