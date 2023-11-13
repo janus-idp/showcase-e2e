@@ -39,7 +39,7 @@ save_junit() {
     JUNIT_ZIP_FILE="${OUTPUT_FILE_NAME}.zip"
     JUNIT_ZIP_FILE_LOCATION="/tmp/${JUNIT_ZIP_FILE}"
 
-    zip -rj $JUNIT_ZIP_FILE_LOCATION $RESULTS_LOCATION
+    # zip -rj $JUNIT_ZIP_FILE_LOCATION $RESULTS_LOCATION
 
     # disabled redundant login and target
     # ibmcloud login --apikey "${API_KEY}"
