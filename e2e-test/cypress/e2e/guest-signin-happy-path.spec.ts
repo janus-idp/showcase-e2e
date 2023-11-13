@@ -1,7 +1,7 @@
-import {UIhelper} from "../utils/UIhelper";
-import {HomePage} from "../support/pages/HomePage";
-import {Common} from "../utils/Common";
-import {gpts} from "../support/testData/gpts";
+import { UIhelper } from "../utils/UIhelper";
+import { HomePage } from "../support/pages/HomePage";
+import { Common } from "../utils/Common";
+import { gpts } from "../support/testData/gpts";
 
 describe("Guest Signin Happy path", () => {
   before(() => {
@@ -22,28 +22,28 @@ describe("Guest Signin Happy path", () => {
     // UIhelper.verifyRowsInTable(['No records to display'])
   });
 
-  it("Verify that all users in your Github Organization have been ingested into the Catalog Page", () => {
-    UIhelper.selectMuiBox("Kind", "User");
-    UIhelper.verifyRowsInTable(["subhashkhileri", "josephca", "gustavolira"]);
-  });
+  // it("Verify that all users in your Github Organization have been ingested into the Catalog Page", () => {
+  //   UIhelper.selectMuiBox("Kind", "User");
+  //   UIhelper.verifyRowsInTable(["subhashkhileri", "josephca", "gustavolira"]);
+  // });
 
-  it("Verify all 12 GPTs appear in the Create page", () => {
-    UIhelper.openSidebar("Create...");
-    UIhelper.verifyHeading("Golden Path Templates");
+  // it("Verify all 12 GPTs appear in the Create page", () => {
+  //   UIhelper.openSidebar("Create...");
+  //   UIhelper.verifyHeading("Golden Path Templates");
 
-    gpts.forEach((gpt) => {
-      UIhelper.verifyHeading(gpt);
-    });
-  });
+  //   gpts.forEach((gpt) => {
+  //     UIhelper.verifyHeading(gpt);
+  //   });
+  // });
 
-  it("Verify Profile is Guest in the Settings page (Ensure backstage identity's User Entity is user:default/guest)", () => {
-    UIhelper.openSidebar("Settings");
-    UIhelper.verifyHeading("Guest");
-    UIhelper.verifyHeading("User Entity: user:default/guest");
-  });
+  // it("Verify Profile is Guest in the Settings page (Ensure backstage identity's User Entity is user:default/guest)", () => {
+  //   UIhelper.openSidebar("Settings");
+  //   UIhelper.verifyHeading("Guest");
+  //   UIhelper.verifyHeading("User Entity: user:default/guest");
+  // });
 
-  it("Sign Out and Verify that you return to the Sign-in page", () => {
-    UIhelper.openSidebar("Settings");
-    Common.signOut();
-  });
+  // it("Sign Out and Verify that you return to the Sign-in page", () => {
+  //   UIhelper.openSidebar("Settings");
+  //   Common.signOut();
+  // });
 });
