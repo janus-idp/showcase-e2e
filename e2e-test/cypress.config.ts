@@ -14,7 +14,7 @@ export default defineConfig({
   video: true,
   videoUploadOnPasses: true,
   screenshotOnRunFailure: true,
-  reporter: 'mocha-junit-reporter',
+  reporter: 'junit',
   reporterOptions: {
     mochaFile: 'cypress/results/junit/junit-[hash].xml',
     
